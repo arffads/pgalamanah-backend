@@ -1,18 +1,17 @@
 //importing modules
 const { Sequelize } = require("sequelize");
-require("dotenv").config();
 
-const dbConfig = require("../config/db.config");
+const { development } = require("../config/db.config");
 
 //Database connection with dialect of postgres specifying the database we are using
 //database name is discover
 const sequelize = new Sequelize(
-  dbConfig.development.DB,
-  dbConfig.development.USER,
-  dbConfig.development.PASSWORD,
+  development.DB,
+  development.USER,
+  development.PASSWORD,
   {
-    host: dbConfig.development.HOST,
-    dialect: dbConfig.development.dialect,
+    host: development.HOST,
+    dialect: development.dialect,
   }
 );
 
