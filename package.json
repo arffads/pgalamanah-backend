@@ -11,8 +11,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
-    "type": "git",
-    "url": "Arif-196"
+    "type": "git"
   },
   "author": "Arif Fadillah",
   "license": "MIT",
