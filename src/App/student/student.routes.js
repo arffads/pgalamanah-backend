@@ -22,10 +22,10 @@ router.post("/login", signInStudent);
 
 router.get("/list", verifyToken, getStudent);
 
-router.get("/find/:nip", verifyToken, findStudentByNis);
+router.get("/find/:nis", verifyToken, findStudentByNis);
 
-router.put("/update/:nip", verifyToken, updateStudent);
+router.put("/update/:nis", verifyToken, updateStudent);
 
-router.delete("/delete/:nip", verifyToken, deleteStudent);
+router.delete("/delete/:nis", verifyToken, deleteStudent);
 
 module.exports = router;

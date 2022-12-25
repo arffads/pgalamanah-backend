@@ -11,7 +11,7 @@ const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
 const getStudent = async (req, res) => {
   try {
     const student = await Student.findAll({
-      attributes: ["nis", "fullName", "gender", "alamat", "kode_kelas"],
+      attributes: ["nis", "fullName", "gender", "alamat", "classDetailId"],
     });
     return makeResponse.success(res, student);
   } catch (err) {
@@ -86,12 +86,13 @@ const findStudentByNis = async (req, res) => {
 const updateStudent = async (req, res) => {
   try {
     // TODO
-    const student = await student.update(
+    const student = await Student.update(
       {
         fullName: req.body.fullName,
         alamat: req.body.alamat,
         gender: req.body.gender,
         password: req.body.password,
+        classDetailId: req.body.classDetailId,
       },
       {
         where: { nis: req.params.nis },
