@@ -5,7 +5,7 @@ const audioSave = async (req, res) => {
     if (req.files.hasOwnProperty("record")) {
       const uploadAudio = await fs.rename(
         req.files["record"].path,
-        `../src/public/audio/${req.files["record"].name}`,
+        `../public/audio/${req.files["record"].name}`,
         (err) => {
           if (err) throw err;
         }

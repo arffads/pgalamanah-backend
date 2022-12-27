@@ -24,7 +24,7 @@ const studentPostPerhafalan = async (req, res) => {
     if (req.file) {
       const uploadAudio = await fs.rename(
         req.file.path,
-        `src/public/audio/${req.file.originalname}`,
+        `public/audio/${req.file.originalname}`,
         (err) => {
           if (err) throw err;
         }

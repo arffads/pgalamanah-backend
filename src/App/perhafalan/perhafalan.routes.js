@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const upload = multer({ dest: "src/public/audio/" });
+const upload = multer({ dest: "public/audio/" });
 const {
   getAllPerhafalan,
   findPerhafalanById,
