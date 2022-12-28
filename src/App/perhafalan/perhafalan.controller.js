@@ -17,14 +17,17 @@ const getAllPerhafalan = async (req, res) => {
 
 const studentPostPerhafalan = async (req, res) => {
   try {
+    console.log(req.file.originalname, "<originalname");
     let nis = {};
     if (req.params.nis) {
       nis = { nis: req.params.nis };
     }
+    let newFilename = req.file.originalname;
     if (req.file) {
+      newFilename = `${req.body.hafalan_id}_${req.body.nis}_${newFilename}`;
       const uploadAudio = await fs.rename(
         req.file.path,
-        `public/audio/${req.file.originalname}`,
+        `public/audio/${newFilename}`,
         (err) => {
           if (err) throw err;
         }
@@ -33,7 +36,7 @@ const studentPostPerhafalan = async (req, res) => {
 
     const postHafalan = await DetailHafalan.create(
       {
-        record: req.file.originalname,
+        record: newFilename,
         nis: req.body.nis,
         hafalan_id: req.body.hafalan_id,
       },
