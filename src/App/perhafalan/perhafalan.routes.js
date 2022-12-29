@@ -27,7 +27,6 @@ router.put("/update-teacher/:id", verifyToken, updatePerhafalanByTeacher);
 router.post(
   "/submission/:nis",
   [verifyToken, upload.single("record")],
-  verifySubmit,
   studentPostPerhafalan
 );
 

@@ -17,6 +17,19 @@ const getAllPerhafalan = async (req, res) => {
 
 const studentPostPerhafalan = async (req, res) => {
   try {
+    const findHafalan = await DetailHafalan.findOne({
+      where: {
+        nis: req.body.nis,
+        hafalan_id: req.body.hafalan_id,
+      },
+    });
+
+    if (findHafalan !== null) {
+      return makeResponse.failed(res, {
+        message: "Failed to submit, Data is Exist!",
+      });
+    }
+
     let nis = {};
     if (req.params.nis) {
       nis = { nis: req.params.nis };
