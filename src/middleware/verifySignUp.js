@@ -8,7 +8,6 @@ const ClassRoom = db.models.classRoom;
 // Check Admin Username Before Create new Admin
 const checkDuplicateUsernameAdmin = async (req, res, next) => {
   // Username
-  console.log(Admin, "Tesss");
   await Admin.findOne({
     where: {
       username: req.body.username,

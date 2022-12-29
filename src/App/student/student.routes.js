@@ -7,6 +7,7 @@ const {
   findStudentByNis,
   updateStudent,
   deleteStudent,
+  findSiswaByClassDetail,
 } = require("./student.controller");
 const {
   checkDuplicateUsernameStudent,
@@ -19,6 +20,8 @@ router.post("/register", checkDuplicateUsernameStudent, registerStudent);
 
 //login route
 router.post("/login", signInStudent);
+
+router.get("/find/class/:classDetailId", verifyToken, findSiswaByClassDetail);
 
 router.get("/list", verifyToken, getStudent);
 

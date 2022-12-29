@@ -2,7 +2,7 @@
 // Assigning Admins to the variable Student
 const db = require("../../models");
 const Student = db.models.student;
-const DetailHafalan = db.models.detail_hafalan;
+const ClassDetail = db.models.classDetail;
 const makeResponse = require("../../middleware/response");
 const { createToken } = require("../../middleware/token");
 const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
@@ -82,6 +82,34 @@ const findStudentByNis = async (req, res) => {
   }
 };
 
+const findSiswaByClassDetail = async (req, res) => {
+  try {
+    const student = await Student.findAll({
+      attributes: ["nis", "fullName", "gender", "alamat", "classDetailId"],
+      include: [
+        {
+          model: db.models.class_detail,
+          attributes: ["id", "kode_kelas"],
+          include: [
+            {
+              model: db.models.classRoom,
+              attributes: [
+                "kode_kelas",
+                "nama_kelas",
+                "teacherClassRelationId",
+              ],
+            },
+          ],
+        },
+      ],
+      where: { classDetailId: req.params.classDetailId },
+    });
+    return makeResponse.success(res, student);
+  } catch (err) {
+    return err;
+  }
+};
+
 // Update Student
 const updateStudent = async (req, res) => {
   try {
@@ -126,4 +154,5 @@ module.exports = {
   findStudentByNis,
   updateStudent,
   deleteStudent,
+  findSiswaByClassDetail,
 };

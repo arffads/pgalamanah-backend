@@ -11,6 +11,8 @@ const {
   studentPostPerhafalan,
 } = require("../perhafalan/perhafalan.controller");
 
+const { verifySubmit } = require("../../middleware/verifySubmit");
+
 const { verifyToken } = require("../../middleware/token");
 
 /* ENDPOINT FOR PERHAFALAN */
@@ -25,6 +27,7 @@ router.put("/update-teacher/:id", verifyToken, updatePerhafalanByTeacher);
 router.post(
   "/submission/:nis",
   [verifyToken, upload.single("record")],
+  verifySubmit,
   studentPostPerhafalan
 );
 

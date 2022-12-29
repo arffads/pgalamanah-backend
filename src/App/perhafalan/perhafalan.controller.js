@@ -17,7 +17,6 @@ const getAllPerhafalan = async (req, res) => {
 
 const studentPostPerhafalan = async (req, res) => {
   try {
-    console.log(req.file.originalname, "<originalname");
     let nis = {};
     if (req.params.nis) {
       nis = { nis: req.params.nis };
@@ -47,6 +46,7 @@ const studentPostPerhafalan = async (req, res) => {
         },
       }
     );
+
     return makeResponse.success(res, postHafalan);
   } catch (err) {
     return makeResponse.failed(res, err);
