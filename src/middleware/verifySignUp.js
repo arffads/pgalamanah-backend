@@ -2,9 +2,8 @@ const db = require("../models/index");
 const Teacher = db.models.teacher;
 const Admin = db.models.admin;
 const Student = db.models.student;
-const ClassRoom = db.models.classRoom;
+const Classroom = db.models.classroom;
 
-// console.log(db, "wwqqwqqwqwqq");
 // Check Admin Username Before Create new Admin
 const checkDuplicateUsernameAdmin = async (req, res, next) => {
   // Username
@@ -12,18 +11,16 @@ const checkDuplicateUsernameAdmin = async (req, res, next) => {
     where: {
       username: req.body.username,
     },
-  })
-    .then((admin) => {
-      if (admin) {
-        res.status(400).send({
-          message: "Failed! Username is already in use!",
-        });
-        return;
-      }
-    })
-    .catch((err) => {
-      console.log(err, "Error");
-    });
+  }).then((admin) => {
+    if (admin) {
+      res.status(400).send({
+        err: {},
+        status_code: 400,
+        message: "Failed! Username is already in use!",
+        success: false,
+      });
+    }
+  });
   next();
 };
 // Check Teacher Nip Before Create new Teacher
@@ -34,10 +31,12 @@ const checkDuplicateUsernameTeacher = (req, res, next) => {
     },
   }).then((teacher) => {
     if (teacher) {
-      res.status(400).send({
+      return res.status(400).send({
+        err: {},
+        status_code: 400,
         message: "Failed! Nip is already in use!",
+        success: false,
       });
-      return;
     }
   });
   next();
@@ -50,27 +49,31 @@ const checkDuplicateUsernameStudent = (req, res, next) => {
     },
   }).then((student) => {
     if (student) {
-      res.status(400).send({
-        message: "Failed! Nip is already in use!",
+      return res.status(400).send({
+        err: {},
+        status_code: 400,
+        message: "Failed! Nis is already in use!",
+        success: false,
       });
-      return;
     }
   });
   next();
 };
 
 //Check Student Nis Before Create new Student
-const checkDuplicateClassRoom = (req, res, next) => {
-  ClassRoom.findOne({
+const checkDuplicateClassroom = (req, res, next) => {
+  Classroom.findOne({
     where: {
       kode_kelas: req.body.kode_kelas,
     },
-  }).then((classRoom) => {
-    if (classRoom) {
-      res.status(400).send({
-        message: "Failed! Nip is already in use!",
+  }).then((classroom) => {
+    if (classroom) {
+      return res.status(400).send({
+        err: {},
+        status_code: 400,
+        message: "Failed! Class is already in use!",
+        success: false,
       });
-      return;
     }
   });
   next();
@@ -80,5 +83,5 @@ module.exports = {
   checkDuplicateUsernameAdmin,
   checkDuplicateUsernameTeacher,
   checkDuplicateUsernameStudent,
-  checkDuplicateClassRoom,
+  checkDuplicateClassroom,
 };

@@ -2,7 +2,8 @@
 // Assigning Admins to the variable Student
 const db = require("../../models");
 const Student = db.models.student;
-const ClassDetail = db.models.classDetail;
+const ClassDetail = db.models.class_detail;
+const Classroom = db.models.classroom;
 const makeResponse = require("../../middleware/response");
 const { createToken } = require("../../middleware/token");
 const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
@@ -11,7 +12,36 @@ const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
 const getStudent = async (req, res) => {
   try {
     const student = await Student.findAll({
-      attributes: ["nis", "fullName", "gender", "alamat", "classDetailId"],
+      attributes: ["nis", "fullName", "gender", "alamat"],
+      include: [
+        {
+          attributes: ["kode_kelas", "nama_kelas"],
+          model: Classroom,
+        },
+      ],
+    });
+    return makeResponse.success(res, student);
+  } catch (err) {
+    return makeResponse.failed(res, err);
+  }
+};
+
+const getStudentByClassCode = async (req, res) => {
+  try {
+    const student = await Student.findAll({
+      attributes: ["nis", "fullName", "gender", "alamat"],
+      include: [
+        {
+          attributes: ["kode_kelas", "nama_kelas"],
+          model: Classroom,
+          through: {
+            attributes: ["id", "nis", "kode_kelas"],
+            where: {
+              kode_kelas: req.params.kode_kelas,
+            },
+          },
+        },
+      ],
     });
     return makeResponse.success(res, student);
   } catch (err) {
@@ -21,18 +51,35 @@ const getStudent = async (req, res) => {
 
 // Create New Student
 const registerStudent = async (req, res) => {
-  const { nis, fullName, alamat, gender, password, classDetailId } = req.body;
-  const hashedPassword = await createHashPassword(password);
-  if (hashedPassword instanceof Error) throw hashedPassword;
   try {
+    const findClass = await Classroom.findOne({
+      where: {
+        kode_kelas: req.body.kode_kelas,
+      },
+    });
+
+    if (findClass === null) {
+      return makeResponse.failed(res, { message: "Class Not Found" });
+    }
+
+    const { nis, fullName, alamat, gender, password } = req.body;
+    const hashedPassword = await createHashPassword(password);
+    if (hashedPassword instanceof Error) throw hashedPassword;
+
     const student = await Student.create({
       nis: nis,
       fullName: fullName,
       alamat: alamat,
       gender: gender,
       password: hashedPassword,
-      classDetailId: classDetailId,
     });
+    let studentNis = student.nis;
+    if (studentNis !== null) {
+      await ClassDetail.create({
+        nis: studentNis,
+        kode_kelas: findClass.kode_kelas,
+      });
+    }
     return makeResponse.success(res, student);
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -82,33 +129,6 @@ const findStudentByNis = async (req, res) => {
   }
 };
 
-const findSiswaByClassDetail = async (req, res) => {
-  try {
-    const student = await Student.findAll({
-      attributes: ["nis", "fullName", "gender", "alamat", "classDetailId"],
-      include: [
-        {
-          model: db.models.class_detail,
-          attributes: ["id", "kode_kelas"],
-          include: [
-            {
-              model: db.models.classRoom,
-              attributes: [
-                "kode_kelas",
-                "nama_kelas",
-                "teacherClassRelationId",
-              ],
-            },
-          ],
-        },
-      ],
-      where: { classDetailId: req.params.classDetailId },
-    });
-    return makeResponse.success(res, student);
-  } catch (err) {
-    return err;
-  }
-};
 
 // Update Student
 const updateStudent = async (req, res) => {
@@ -154,5 +174,5 @@ module.exports = {
   findStudentByNis,
   updateStudent,
   deleteStudent,
-  findSiswaByClassDetail,
+  getStudentByClassCode,
 };

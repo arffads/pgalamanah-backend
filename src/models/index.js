@@ -3,6 +3,8 @@ const { Sequelize } = require("sequelize");
 
 const { development } = require("../config/db.config");
 
+// const test = require("./admin.models")
+
 //Database connection with dialect of postgres specifying the database we are using
 //database name is discover
 const sequelize = new Sequelize(
@@ -29,61 +31,45 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //connecting to model
-db.admin = require("../App/admin/admin.model")(sequelize, Sequelize);
-db.classRoom = require("../App/classroom/classroom.model")(
-  sequelize,
-  Sequelize
-);
-db.teacher = require("../App/teacher/teacher.model")(sequelize, Sequelize);
-db.student = require("../App/student/student.model")(sequelize, Sequelize);
-db.teacherRelation = require("../App/teacher_relation/teacher_relation.model")(
-  sequelize,
-  Sequelize
-);
-db.classDetail = require("../App/class_detail/detail_class.model")(
-  sequelize,
-  Sequelize
-);
-db.detail_hafalan = require("../App/perhafalan/perhafalan.model")(
-  sequelize,
-  Sequelize
-);
-db.hafalan = require("../App/hafalan/hafalan.model")(sequelize, Sequelize);
-db.category = require("../App/category_hafalan/category.model")(
-  sequelize,
-  Sequelize
-);
+db.admin = require("./admin.models")(sequelize, Sequelize);
+db.classroom = require("./classroom.models")(sequelize, Sequelize);
+db.teacher = require("./teacher.models")(sequelize, Sequelize);
+db.student = require("./student.models")(sequelize, Sequelize);
+db.teacherClass = require("./teacher_class.models")(sequelize, Sequelize);
+db.classDetail = require("./class_detail.models")(sequelize, Sequelize);
+db.detail_hafalan = require("./perhafalan.models")(sequelize, Sequelize);
+db.hafalan = require("./hafalan.models")(sequelize, Sequelize);
+db.category = require("./category_hafalan.models")(sequelize, Sequelize);
 /************************************************************************************
  *                              ASSOCIATION CENTRE
  ***********************************************************************************/
 // Teacher to Teacher_Realtion
-db.teacher.hasOne(db.teacherRelation, {
+db.teacher.belongsToMany(db.classroom, {
   foreignKey: "nip",
+  through: db.teacherClass,
 });
-db.teacherRelation.belongsTo(db.teacher, {
-  foreignKey: "nip",
-});
-
-// Teacher_Relation To ClassRoom
-db.teacherRelation.hasMany(db.classRoom);
-
-db.classRoom.belongsTo(db.teacherRelation);
-
-// ClassRoom => Class_Detail
-db.classRoom.hasMany(db.classDetail, {
+db.classroom.belongsToMany(db.teacher, {
   foreignKey: "kode_kelas",
+  through: db.teacherClass,
 });
-db.classDetail.belongsTo(db.classRoom, {
+
+// classroom => Class_Detail
+db.classroom.belongsToMany(db.student, {
   foreignKey: "kode_kelas",
+  through: db.classDetail,
+});
+db.student.belongsToMany(db.classroom, {
+  foreignKey: "nis",
+  through: db.classDetail,
 });
 
 // Class Detail => Student
-db.classDetail.hasMany(db.student, {
-  foreignKey: "classDetailId",
-});
-db.student.belongsTo(db.classDetail, {
-  foreignKey: "classDetailId",
-});
+// db.classDetail.hasMany(db.student, {
+//   foreignKey: "classDetailId",
+// });
+// db.student.belongsTo(db.classDetail, {
+//   foreignKey: "classDetailId",
+// });
 
 // student => perhafalan
 db.student.hasMany(db.detail_hafalan, {

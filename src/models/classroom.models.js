@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const ClassRoom = sequelize.define(
-    "classRoom",
+  const Classroom = sequelize.define(
+    "classroom",
     {
       kode_kelas: {
         type: DataTypes.STRING,
@@ -12,8 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+   
     },
     { freezeTableName: true }
   );
-  return ClassRoom;
+  return Classroom;
 };

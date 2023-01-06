@@ -2,6 +2,7 @@
 // Assigning Admins to the variable Student
 const db = require("../../models");
 const Category = db.models.category_hafalan;
+const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
 
 const getAllCategory = async (req, res) => {
@@ -10,6 +11,25 @@ const getAllCategory = async (req, res) => {
       attributes: ["id", "category_name"],
     });
     return makeResponse.success(res, category);
+  } catch (err) {
+    return makeResponse.failed(res, err);
+  }
+};
+
+const getCategoryHafalanByNis = async (req, res) => {
+  try {
+    const findStudent = await Student.findOne({
+      where: {
+        nis: req.params.nis,
+      },
+    });
+
+    if (findStudent === null) {
+      return makeResponse.failed(res, { message: "unregistered student" });
+    }
+
+    const categoryHafalan = await Category.findAll();
+    return makeResponse.success(res, categoryHafalan);
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -41,4 +61,9 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-module.exports = { getAllCategory, addCategory, deleteCategory };
+module.exports = {
+  getAllCategory,
+  addCategory,
+  deleteCategory,
+  getCategoryHafalanByNis,
+};

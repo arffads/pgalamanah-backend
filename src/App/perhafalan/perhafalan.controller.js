@@ -2,6 +2,7 @@
 // Assigning Admins to the variable Student
 const db = require("../../models");
 const DetailHafalan = db.models.detail_hafalan;
+const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
 const Hafalan = db.models.hafalan;
 const fs = require("fs");
@@ -17,6 +18,15 @@ const getAllPerhafalan = async (req, res) => {
 
 const studentPostPerhafalan = async (req, res) => {
   try {
+    const findStudent = await Student.findOne({
+      where: {
+        nis: req.body.nis,
+      },
+    });
+
+    if (findStudent === null) {
+      return makeResponse.failed(res, { message: "Student Unregistered!" });
+    }
     const findHafalan = await DetailHafalan.findOne({
       where: {
         nis: req.body.nis,
@@ -91,6 +101,7 @@ const findPerhafalanByStudentNis = async (req, res) => {
         nis: req.params.nis,
       },
     });
+
     return makeResponse.success(res, perhafalan);
   } catch (err) {
     return makeResponse.failed(res, err);

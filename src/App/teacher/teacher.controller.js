@@ -30,10 +30,6 @@ const registerTeacher = async (req, res) => {
       gender: gender,
       password: hashedPassword,
     });
-    const teacherNip = teacher.nip;
-    await TeacherRelation.create({
-      nip: teacherNip,
-    });
     return makeResponse.success(res, teacher);
   } catch (err) {
     return makeResponse.failed(res, err);

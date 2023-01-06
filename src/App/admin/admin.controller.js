@@ -9,6 +9,8 @@ const {
   compareHash,
 } = require("../../middleware/bcrypt.js");
 
+// console.log(db, "<============");
+
 const getAdmin = async (req, res) => {
   try {
     const admin = await Admin.findAll();

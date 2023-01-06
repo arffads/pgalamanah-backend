@@ -9,6 +9,7 @@ const classRoutes = require("./src/App/classroom/classroom.routes");
 const categoryRoutes = require("./src/App/category_hafalan/category.routes");
 const hafalanRoutes = require("./src/App/hafalan/hafalan.routes");
 const detailRoutes = require("./src/App/perhafalan/perhafalan.routes");
+const teacherClassRoutes = require("./src/App/teacher_relation/teacher_class_relation.routes");
 
 //setting up your port
 const PORT = process.env.PORT || 8000;
@@ -32,6 +33,7 @@ app.use("/api/class", classRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/hafalan", hafalanRoutes);
 app.use("/api/detail-hafalan", detailRoutes);
+// app.use("/api/teacher-class", teacherClassRoutes);
 
 //listening to server connection
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));

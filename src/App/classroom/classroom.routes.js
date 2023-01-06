@@ -7,15 +7,18 @@ const {
   updateClassRoom,
   deleteClassRoom,
   findClassByClassCode,
+  getClassByNip,
 } = require("./classroom.controller");
-const { checkDuplicateClassRoom } = require("../../middleware/verifySignUp.js");
+const { checkDuplicateClassroom } = require("../../middleware/verifySignUp.js");
 const { verifyToken } = require("../../middleware/token");
 
 // Endpoint For Class
 // Create New Class
-router.post("/create", checkDuplicateClassRoom, verifyToken, createClass);
+router.post("/create", checkDuplicateClassroom, verifyToken, createClass);
 // List All Class Was Created
 router.get("/list", verifyToken, getClass);
+router.get("/list/:nip", verifyToken, getClassByNip);
+
 // Find Class By Class Code
 router.get("/:kode_kelas", verifyToken, findClassByClassCode);
 // Update Class

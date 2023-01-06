@@ -6,6 +6,7 @@ const {
   getHafalanByCategoryId,
   updateHafalan,
   deleteHafalan,
+  getHafalanByNis,
 } = require("./hafalan.controller");
 
 const { verifyToken } = require("../../middleware/token");
@@ -15,6 +16,7 @@ const { verifyToken } = require("../../middleware/token");
 router.post("/add-hafalan", verifyToken, addHafalan);
 
 router.get("/list-hafalan", verifyToken, getAllHafalan);
+router.get("/list-hafalan/:nis", verifyToken, getHafalanByNis);
 
 router.get("/:category_id", verifyToken, getHafalanByCategoryId);
 

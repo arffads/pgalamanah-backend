@@ -3,10 +3,31 @@
 const db = require("../../models");
 const Hafalan = db.models.hafalan;
 const DetailHafalan = db.models.detail_hafalan;
+const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
 
 const getAllHafalan = async (req, res) => {
   try {
+    const hafalan = await Hafalan.findAll({
+      attributes: ["id", "title", "media_reader", "category_id"],
+    });
+    return makeResponse.success(res, hafalan);
+  } catch (err) {
+    return makeResponse.failed(res, err);
+  }
+};
+
+const getHafalanByNis = async (req, res) => {
+  try {
+    const findStudent = await Student.findOne({
+      where: {
+        nis: req.params.nis,
+      },
+    });
+
+    if (findStudent === null) {
+      return makeResponse.failed(res, { message: "Unregistered Student" });
+    }
     const hafalan = await Hafalan.findAll({
       attributes: ["id", "title", "media_reader", "category_id"],
     });
@@ -47,16 +68,11 @@ const getHafalanByCategoryId = async (req, res) => {
 const getHafalanById = async (req, res) => {
   try {
     // TODO
-    const hafalan = await Hafalan.findAll(
-      {
-        where: {
-          id: req.params.id,
-        },
+    const hafalan = await Hafalan.findAll({
+      where: {
+        id: req.params.id,
       },
-      {
-        // include: detail_hafalan;
-      }
-    );
+    });
     return makeResponse.success(res, hafalan);
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -108,4 +124,5 @@ module.exports = {
   updateHafalan,
   deleteHafalan,
   getHafalanById,
+  getHafalanByNis,
 };
