@@ -28,22 +28,17 @@ const getStudent = async (req, res) => {
 
 const getStudentByClassCode = async (req, res) => {
   try {
-    const student = await Student.findAll({
-      attributes: ["nis", "fullName", "gender", "alamat"],
+    const classroom = await Classroom.findOne({
+      where: {
+        kode_kelas: req.params.kode_kelas,
+      },
       include: [
         {
-          attributes: ["kode_kelas", "nama_kelas"],
-          model: Classroom,
-          through: {
-            attributes: ["id", "nis", "kode_kelas"],
-            where: {
-              kode_kelas: req.params.kode_kelas,
-            },
-          },
+          model: Student,
         },
       ],
     });
-    return makeResponse.success(res, student);
+    return makeResponse.success(res, classroom);
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -128,7 +123,6 @@ const findStudentByNis = async (req, res) => {
     return makeResponse.failed(res, err);
   }
 };
-
 
 // Update Student
 const updateStudent = async (req, res) => {

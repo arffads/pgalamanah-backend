@@ -28,22 +28,25 @@ const getClass = async (req, res) => {
 
 const getClassByNip = async (req, res) => {
   try {
-    const classroom = await Classroom.findAll({
-      attributes: ["kode_kelas", "nama_kelas"],
-      include: [
-        {
-          attributes: ["nip", "fullName", "alamat", "gender"],
-          model: Teacher,
-          through: {
-            attributes: ["id", "nip", "kode_kelas"],
-            where: {
-              nip: req.params.nip,
-            },
-          },
+    let status = {};
+
+    if (req.params.status) {
+      status = { status: req.params.status };
+    }
+    const teacher = await Teacher.findOne({
+      attributes: ["nip", "fullName", "alamat", "gender"],
+      where: {
+        nip: req.params.nip,
+      },
+      include: {
+        attributes: ["kode_kelas", "nama_kelas", "status"],
+        model: Classroom,
+        where: {
+          ...status,
         },
-      ],
+      },
     });
-    return makeResponse.success(res, classroom);
+    return makeResponse.success(res, teacher);
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -67,6 +70,7 @@ const createClass = async (req, res) => {
     const classroom = await Classroom.create({
       kode_kelas: kode_kelas,
       nama_kelas: nama_kelas,
+      status: "ON_PROGRESS",
     });
     let classCode = classroom.kode_kelas;
     if (classCode !== null) {
@@ -98,15 +102,18 @@ const findClassByClassCode = async (req, res) => {
 
 const updateClassRoom = async (req, res) => {
   try {
-    // TODO
-    const { kode_kelas, nama_kelas } = req.body;
-    await Classroom.update({
-      kode_kelas: kode_kelas,
-      nama_kelas: nama_kelas,
-    });
+    await Classroom.update(
+      {
+        status: req.body.status,
+      },
+      {
+        where: {
+          kode_kelas: req.params.kode_kelas,
+        },
+      }
+    );
     return makeResponse.success(res, {
-      kode_kelas: kode_kelas,
-      nama_kelas: nama_kelas,
+      status: req.body.status,
     });
   } catch (err) {
     return makeResponse.failed(res, err);
