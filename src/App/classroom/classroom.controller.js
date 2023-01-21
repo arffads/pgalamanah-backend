@@ -33,7 +33,7 @@ const getClassByNip = async (req, res) => {
     if (req.params.status) {
       status = { status: req.params.status };
     }
-    const teacher = await Classroom.findOne({
+    const teacher = await Classroom.findAll({
       attributes: ["kode_kelas", "nama_kelas", "status"],
 
       include: {
