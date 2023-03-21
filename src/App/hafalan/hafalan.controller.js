@@ -5,6 +5,7 @@ const Hafalan = db.models.hafalan;
 const DetailHafalan = db.models.detail_hafalan;
 const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
+const fs = require("fs");
 
 const getAllHafalan = async (req, res) => {
   try {
@@ -39,11 +40,20 @@ const getHafalanByNis = async (req, res) => {
 
 const addHafalan = async (req, res) => {
   try {
-    const { title, media_reader, category_id } = req.body;
+    if (req.file) {
+      const uploadImg = await fs.rename(
+        req.file.path,
+        `public/surat_img${req.file.originalname}`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+    }
     const hafalan = await Hafalan.create({
-      title: title,
-      media_reader: media_reader,
-      category_id: category_id,
+      title: req.body.title,
+      image_media: req.file.originalname,
+      media_reader: req.body.media_reader,
+      category_id: req.body.category_id,
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {

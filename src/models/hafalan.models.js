@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      image_media: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       media_reader: {
         type: DataTypes.STRING,
       },

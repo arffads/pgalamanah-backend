@@ -15,7 +15,7 @@ const createHashPassword = async (payload) => {
     const hash = await bcrypt.hash(payload, salt);
     return hash;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 

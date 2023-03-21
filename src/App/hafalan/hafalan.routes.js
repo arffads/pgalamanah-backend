@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer({ dest: "public/surat_img/" });
 const {
   getAllHafalan,
   addHafalan,
@@ -13,7 +15,11 @@ const { verifyToken } = require("../../middleware/token");
 
 //signup endpoint
 //passing the middleware function to the signup
-router.post("/add-hafalan", verifyToken, addHafalan);
+router.post(
+  "/add-hafalan",
+  [verifyToken, upload.single("image_media")],
+  addHafalan
+);
 
 router.get("/list-hafalan", verifyToken, getAllHafalan);
 router.get("/list-hafalan/:nis", verifyToken, getHafalanByNis);

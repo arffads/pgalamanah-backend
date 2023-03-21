@@ -41,7 +41,6 @@ const addCategory = async (req, res) => {
     const category = await Category.create({
       category_name: category_name,
     });
-    // console.log(category, "<============");
     return makeResponse.success(res, category);
   } catch (err) {
     return makeResponse.failed(res, err);
