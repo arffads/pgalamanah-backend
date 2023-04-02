@@ -14,7 +14,6 @@ const {
 const { verifyToken } = require("../../middleware/token");
 
 //signup endpoint
-//passing the middleware function to the signup
 router.post("/register", checkDuplicateUsernameTeacher, registerTeacher);
 
 //login route

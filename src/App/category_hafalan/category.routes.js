@@ -13,7 +13,7 @@ const { verifyToken } = require("../../middleware/token");
 router.post("/add-category", verifyToken, addCategory);
 
 router.get("/list", verifyToken, getAllCategory);
-router.get("/list/:nis", verifyToken, getCategoryHafalanByNis);
+// router.get("/list/:nis", verifyToken, getCategoryHafalanByNis);
 
 router.delete("/delete/:id", verifyToken, deleteCategory);
 

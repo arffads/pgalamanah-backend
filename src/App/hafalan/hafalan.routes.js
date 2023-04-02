@@ -22,6 +22,7 @@ router.post(
 );
 
 router.get("/list-hafalan", verifyToken, getAllHafalan);
+
 router.get("/list-hafalan/:nis", verifyToken, getHafalanByNis);
 
 router.get("/:category_id", verifyToken, getHafalanByCategoryId);

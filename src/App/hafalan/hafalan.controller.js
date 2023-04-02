@@ -10,7 +10,7 @@ const fs = require("fs");
 const getAllHafalan = async (req, res) => {
   try {
     const hafalan = await Hafalan.findAll({
-      attributes: ["id", "title", "media_reader", "category_id"],
+      attributes: ["id", "title","image_media", "media_reader", "category_id"],
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {

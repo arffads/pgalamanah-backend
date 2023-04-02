@@ -3,7 +3,6 @@ const { Sequelize } = require("sequelize");
 
 const { development } = require("../config/db.config");
 
-// const test = require("./admin.models")
 
 //Database connection with dialect of postgres specifying the database we are using
 //database name is discover
