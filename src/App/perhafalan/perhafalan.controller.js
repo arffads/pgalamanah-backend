@@ -4,7 +4,6 @@ const db = require("../../models");
 const DetailHafalan = db.models.detail_hafalan;
 const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
-const Hafalan = db.models.hafalan;
 const fs = require("fs");
 
 const getAllPerhafalan = async (req, res) => {

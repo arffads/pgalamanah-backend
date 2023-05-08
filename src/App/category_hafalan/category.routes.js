@@ -4,7 +4,6 @@ const {
   getAllCategory,
   addCategory,
   deleteCategory,
-  getCategoryHafalanByNis,
 } = require("./category.controller");
 
 const { verifyToken } = require("../../middleware/token");

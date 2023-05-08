@@ -55,15 +55,6 @@ const signInAdmin = async (req, res) => {
   }
 };
 
-const findAdminById = (adminId) => {
-  return Admin.findByPk(adminId, { include: ["teacher"] })
-    .then((admin) => {
-      return admin;
-    })
-    .catch((err) => {
-      console.log(">> Error while finding admin: ", err);
-    });
-};
 
 module.exports = {
   getAdmin,

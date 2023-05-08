@@ -21,8 +21,6 @@ router.post("/register", checkDuplicateUsernameStudent, registerStudent);
 //login route
 router.post("/login", signInStudent);
 
-// router.get("/find/class/:classDetailId", verifyToken, findSiswaByClassDetail);
-
 router.get("/list", verifyToken, getStudent);
 
 router.get("/list/:kode_kelas", verifyToken, getStudentByClassCode);

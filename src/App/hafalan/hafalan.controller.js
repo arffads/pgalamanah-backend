@@ -2,7 +2,6 @@
 // Assigning Admins to the variable Student
 const db = require("../../models");
 const Hafalan = db.models.hafalan;
-const DetailHafalan = db.models.detail_hafalan;
 const Student = db.models.student;
 const makeResponse = require("../../middleware/response");
 const fs = require("fs");

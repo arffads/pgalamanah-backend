@@ -2,7 +2,6 @@
 // Assigning Admins to the variable Admin
 const db = require("../../models");
 const Teacher = db.models.teacher;
-const TeacherRelation = db.models.teacher_class_relation;
 const makeResponse = require("../../middleware/response.js");
 const { createToken } = require("../../middleware/token");
 const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
