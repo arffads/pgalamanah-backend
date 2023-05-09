@@ -11,8 +11,8 @@ const hafalanRoutes = require('./src/App/hafalan/hafalan.routes');
 const detailRoutes = require('./src/App/perhafalan/perhafalan.routes');
 
 // setting up your port
-const PORT = process.env.PORT || 3306;
-const HOST = process.env.HOST || '127.0.0.1';
+const PORT = process.env.DATABASE_PORT || 6000;
+const HOST = process.env.DATABASE_HOST;
 
 // assigning the variable app to express
 const app = express();

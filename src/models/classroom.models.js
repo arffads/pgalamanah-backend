@@ -1,20 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
   const Classroom = sequelize.define(
-    "classroom",
+    'classroom',
     {
       kode_kelas: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: false,
+        autoIncrement: false
       },
       nama_kelas: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       status: {
-        type: DataTypes.ENUM("ON_PROGRESS", "GRADUATE"),
-      },
+        type: DataTypes.ENUM('ON_PROGRESS', 'GRADUATE')
+      }
     },
     { freezeTableName: true }
   );

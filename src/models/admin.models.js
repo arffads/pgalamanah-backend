@@ -1,20 +1,20 @@
-//Admin model
+// Admin model
 
 module.exports = (sequelize, DataTypes) => {
   const Admin = sequelize.define(
-    "admin",
+    'admin',
     {
       username: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     {
-      freezeTableName: true,
+      freezeTableName: true
     }
   );
   return Admin;

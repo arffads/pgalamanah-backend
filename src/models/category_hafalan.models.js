@@ -1,14 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
-  const Category_Hafalan = sequelize.define(
-    "category_hafalan",
+  const CategoryHafalan = sequelize.define(
+    'category_hafalan',
     {
       category_name: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     { freezeTableName: true }
   );
 
-  return Category_Hafalan;
+  return CategoryHafalan;
 };

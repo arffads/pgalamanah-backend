@@ -1,24 +1,24 @@
-//importing modules
+// importing modules
 // Assigning Admins to the variable Student
-const db = require("../../models");
+const db = require('../../models');
 const Student = db.models.student;
 const ClassDetail = db.models.class_detail;
 const Classroom = db.models.classroom;
-const makeResponse = require("../../middleware/response");
-const { createToken } = require("../../middleware/token");
-const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
+const makeResponse = require('../../middleware/response');
+const { createToken } = require('../../middleware/token');
+const { createHashPassword, compareHash } = require('../../middleware/bcrypt');
 
 // Get All Student Was Registered
 const getStudent = async (req, res) => {
   try {
     const student = await Student.findAll({
-      attributes: ["nis", "fullName", "gender", "alamat"],
+      attributes: ['nis', 'fullName', 'gender', 'alamat'],
       include: [
         {
-          attributes: ["kode_kelas", "nama_kelas"],
-          model: Classroom,
-        },
-      ],
+          attributes: ['kode_kelas', 'nama_kelas'],
+          model: Classroom
+        }
+      ]
     });
     return makeResponse.success(res, student);
   } catch (err) {
@@ -30,13 +30,13 @@ const getStudentByClassCode = async (req, res) => {
   try {
     const classroom = await Classroom.findOne({
       where: {
-        kode_kelas: req.params.kode_kelas,
+        kode_kelas: req.params.kode_kelas
       },
       include: [
         {
-          model: Student,
-        },
-      ],
+          model: Student
+        }
+      ]
     });
     return makeResponse.success(res, classroom);
   } catch (err) {
@@ -49,12 +49,12 @@ const registerStudent = async (req, res) => {
   try {
     const findClass = await Classroom.findOne({
       where: {
-        kode_kelas: req.body.kode_kelas,
-      },
+        kode_kelas: req.body.kode_kelas
+      }
     });
 
     if (findClass === null) {
-      return makeResponse.failed(res, { message: "Class Not Found" });
+      return makeResponse.failed(res, { message: 'Class Not Found' });
     }
 
     const { nis, fullName, alamat, gender, password } = req.body;
@@ -62,17 +62,17 @@ const registerStudent = async (req, res) => {
     if (hashedPassword instanceof Error) throw hashedPassword;
 
     const student = await Student.create({
-      nis: nis,
-      fullName: fullName,
-      alamat: alamat,
-      gender: gender,
-      password: hashedPassword,
+      nis,
+      fullName,
+      alamat,
+      gender,
+      password: hashedPassword
     });
-    let studentNis = student.nis;
+    const studentNis = student.nis;
     if (studentNis !== null) {
       await ClassDetail.create({
         nis: studentNis,
-        kode_kelas: findClass.kode_kelas,
+        kode_kelas: findClass.kode_kelas
       });
     }
     return makeResponse.success(res, student);
@@ -86,12 +86,12 @@ const signInStudent = async (req, res) => {
   try {
     const student = await Student.findAll({
       where: {
-        nis: req.body.nis,
-      },
+        nis: req.body.nis
+      }
     });
     const isMatch = await compareHash(req.body.password, student[0].password);
     if (!isMatch) {
-      return makeResponse.failed(res, { message: "Password Salah" });
+      return makeResponse.failed(res, { message: 'Password Salah' });
     }
     const studentName = student[0].fullName;
     const nis = student[0].nis;
@@ -99,7 +99,7 @@ const signInStudent = async (req, res) => {
     return makeResponse.success(res, {
       token: accessToken,
       name: studentName,
-      nis: nis,
+      nis
     });
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -112,11 +112,11 @@ const findStudentByNis = async (req, res) => {
     // TODO
     const student = await Student.findOne({
       where: {
-        nis: req.params.nis,
-      },
+        nis: req.params.nis
+      }
     });
     if (student === null) {
-      return makeResponse.failed(res, { message: "NIS Student Not found" });
+      return makeResponse.failed(res, { message: 'NIS Student Not found' });
     }
     return makeResponse.success(res, student);
   } catch (err) {
@@ -134,10 +134,10 @@ const updateStudent = async (req, res) => {
         alamat: req.body.alamat,
         gender: req.body.gender,
         password: req.body.password,
-        classDetailId: req.body.classDetailId,
+        classDetailId: req.body.classDetailId
       },
       {
-        where: { nis: req.params.nis },
+        where: { nis: req.params.nis }
       }
     );
     return makeResponse.success(res, student);
@@ -152,10 +152,10 @@ const deleteStudent = async (req, res) => {
     // TODO
     await Student.destroy({
       where: {
-        nis: req.params.nis,
-      },
+        nis: req.params.nis
+      }
     });
-    return makeResponse.success(res, { message: "Student Delete Success" });
+    return makeResponse.success(res, { message: 'Student Delete Success' });
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -168,5 +168,5 @@ module.exports = {
   findStudentByNis,
   updateStudent,
   deleteStudent,
-  getStudentByClassCode,
+  getStudentByClassCode
 };
