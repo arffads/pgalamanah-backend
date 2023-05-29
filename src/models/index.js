@@ -11,7 +11,8 @@ const sequelize = new Sequelize(
   development.PASSWORD,
   {
     host: development.HOST,
-    dialect: development.dialect
+    dialect: development.dialect,
+    logging: false
   }
 );
 

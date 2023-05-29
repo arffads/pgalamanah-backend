@@ -9,19 +9,24 @@ const classRoutes = require('./src/App/classroom/classroom.routes');
 const categoryRoutes = require('./src/App/category_hafalan/category.routes');
 const hafalanRoutes = require('./src/App/hafalan/hafalan.routes');
 const detailRoutes = require('./src/App/perhafalan/perhafalan.routes');
+const cors = require('cors');
 
 // setting up your port
-const PORT = process.env.DATABASE_PORT || 6000;
 const HOST = process.env.DATABASE_HOST;
+const PORT = process.env.DATABASE_PORT;
 
 // assigning the variable app to express
 const app = express();
 
 // middleware
+app.use(cors({
+  origin: '*'
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
+app.use('/surat_img', express.static('surat_img'));
 app.use(express.static('files'));
 
 // app.post("/")
@@ -36,4 +41,7 @@ app.use('/api/detail-hafalan', detailRoutes);
 // app.use("/api/teacher-class", teacherClassRoutes);
 
 // listening to server connection
-app.listen(PORT, () => console.log(`Server is connected on "http://${HOST}:${PORT}"`));
+app.listen(PORT, () =>
+/* eslint-disable no-console */
+  console.log(`Server is connected on "http://${HOST}:${PORT}"`)
+);

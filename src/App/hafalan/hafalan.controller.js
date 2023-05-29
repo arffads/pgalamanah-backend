@@ -3,13 +3,18 @@
 const db = require('../../models');
 const Hafalan = db.models.hafalan;
 const Student = db.models.student;
+const DetailHafalan = db.models.DetailHafalan;
 const makeResponse = require('../../middleware/response');
 const fs = require('fs');
 
 const getAllHafalan = async (req, res) => {
   try {
     const hafalan = await Hafalan.findAll({
-      attributes: ['id', 'title', 'image_media', 'media_reader', 'category_id']
+      attributes: ['id', 'title', 'image_media', 'media_reader', 'category_id'],
+      model: DetailHafalan,
+      through: {
+        attributes: ['id', 'grade', 'record', 'hafalan_id']
+      }
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -90,12 +95,12 @@ const getHafalanById = async (req, res) => {
 
 const updateHafalan = async (req, res) => {
   try {
-    const { title, media_reader, category_id } = req.body;
+    const { title, mediaReader, categoryId } = req.body;
     await Hafalan.update(
       {
         title,
-        media_reader,
-        category_id
+        mediaReader,
+        categoryId
       },
       {
         where: {
@@ -105,8 +110,8 @@ const updateHafalan = async (req, res) => {
     );
     return makeResponse.success(res, {
       title,
-      media_reader,
-      category_id
+      mediaReader,
+      categoryId
     });
   } catch (err) {
     return makeResponse.failed(res, err);

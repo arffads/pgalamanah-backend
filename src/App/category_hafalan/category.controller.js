@@ -36,10 +36,10 @@ const getCategoryHafalanByNis = async (req, res) => {
 };
 
 const addCategory = async (req, res) => {
-  const { category_name } = req.body;
+  const { categoryName } = req.body;
   try {
     const category = await Category.create({
-      category_name
+      categoryName
     });
     return makeResponse.success(res, category);
   } catch (err) {
