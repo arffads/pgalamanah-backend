@@ -1,7 +1,6 @@
 // Assigning Admins to the variable Admin
 const db = require("../../models");
 const Classroom = db.models.classroom;
-const ClassDetail = db.models.class_detail;
 const Teacher = db.models.teacher;
 const TeacherClass = db.models.teacher_class_relation;
 const makeResponse = require("../../middleware/response.js");
@@ -71,7 +70,7 @@ const createClass = async (req, res) => {
       nama_kelas,
       status: "ON_PROGRESS",
     });
-    let classCode = classroom.kode_kelas;
+    const classCode = classroom.kode_kelas;
     if (classCode !== null) {
       await TeacherClass.create({
         nip: findTeacher.nip,

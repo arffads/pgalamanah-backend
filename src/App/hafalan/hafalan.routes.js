@@ -13,8 +13,8 @@ const {
 
 const { verifyToken } = require("../../middleware/token");
 
-//signup endpoint
-//passing the middleware function to the signup
+// signup endpoint
+// passing the middleware function to the signup
 router.post(
   "/add-hafalan",
   [verifyToken, upload.single("image_media")],

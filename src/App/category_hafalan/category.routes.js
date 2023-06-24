@@ -1,20 +1,19 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 const {
   getAllCategory,
   addCategory,
-  deleteCategory,
-  getCategoryHafalanByNis,
-} = require("./category.controller");
+  deleteCategory
+} = require('./category.controller');
 
-const { verifyToken } = require("../../middleware/token");
+const { verifyToken } = require('../../middleware/token');
 
-//passing the middleware function to the signup
-router.post("/add-category", verifyToken, addCategory);
+// passing the middleware function to the signup
+router.post('/add-category', verifyToken, addCategory);
 
-router.get("/list", verifyToken, getAllCategory);
+router.get('/list', verifyToken, getAllCategory);
 // router.get("/list/:nis", verifyToken, getCategoryHafalanByNis);
 
-router.delete("/delete/:id", verifyToken, deleteCategory);
+router.delete('/delete/:id', verifyToken, deleteCategory);
 
 module.exports = router;

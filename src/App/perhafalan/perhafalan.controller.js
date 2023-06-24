@@ -1,11 +1,10 @@
-//importing modules
+// importing modules
 // Assigning Admins to the variable Student
-const db = require("../../models");
+const db = require('../../models');
 const DetailHafalan = db.models.detail_hafalan;
 const Student = db.models.student;
-const makeResponse = require("../../middleware/response");
-const Hafalan = db.models.hafalan;
-const fs = require("fs");
+const makeResponse = require('../../middleware/response');
+const fs = require('fs');
 
 const getAllPerhafalan = async (req, res) => {
   try {
@@ -20,23 +19,23 @@ const studentPostPerhafalan = async (req, res) => {
   try {
     const findStudent = await Student.findOne({
       where: {
-        nis: req.body.nis,
-      },
+        nis: req.body.nis
+      }
     });
 
     if (findStudent === null) {
-      return makeResponse.failed(res, { message: "Student Unregistered!" });
+      return makeResponse.failed(res, { message: 'Student Unregistered!' });
     }
     const findHafalan = await DetailHafalan.findOne({
       where: {
         nis: req.body.nis,
-        hafalan_id: req.body.hafalan_id,
-      },
+        hafalan_id: req.body.hafalan_id
+      }
     });
 
     if (findHafalan !== null) {
       return makeResponse.failed(res, {
-        message: "Failed to submit, Data is Exist!",
+        message: 'Failed to submit, Data is Exist!'
       });
     }
 
@@ -60,13 +59,13 @@ const studentPostPerhafalan = async (req, res) => {
       {
         record: newFilename,
         nis: req.body.nis,
-        hafalan_id: req.body.hafalan_id,
+        hafalan_id: req.body.hafalan_id
       },
       {
         where: {
           id: req.params.id,
-          ...nis,
-        },
+          ...nis
+        }
       }
     );
 
@@ -85,8 +84,8 @@ const findPerhafalanById = async (req, res) => {
     const perhafalan = await DetailHafalan.findOne({
       where: {
         hafalan_id: req.params.hafalan_id,
-        ...nis,
-      },
+        ...nis
+      }
     });
     return makeResponse.success(res, perhafalan);
   } catch (err) {
@@ -98,8 +97,8 @@ const findPerhafalanByStudentNis = async (req, res) => {
   try {
     const perhafalan = await DetailHafalan.findAll({
       where: {
-        nis: req.params.nis,
-      },
+        nis: req.params.nis
+      }
     });
 
     return makeResponse.success(res, perhafalan);
@@ -112,16 +111,16 @@ const updatePerhafalanByTeacher = async (req, res) => {
   try {
     await DetailHafalan.update(
       {
-        grade: req.body.grade,
+        grade: req.body.grade
       },
       {
         where: {
-          id: req.params.id,
-        },
+          id: req.params.id
+        }
       }
     );
     return makeResponse.success(res, {
-      grade: req.body.grade,
+      grade: req.body.grade
     });
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -132,10 +131,10 @@ const deletePerhafalan = async (req, res) => {
   try {
     await DetailHafalan.destroy({
       where: {
-        id: req.params.nis,
-      },
+        id: req.params.nis
+      }
     });
-    return makeResponse.success(res, { message: "Delete Perhafalan Success" });
+    return makeResponse.success(res, { message: 'Delete Perhafalan Success' });
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -147,5 +146,5 @@ module.exports = {
   findPerhafalanById,
   findPerhafalanByStudentNis,
   updatePerhafalanByTeacher,
-  deletePerhafalan,
+  deletePerhafalan
 };

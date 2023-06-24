@@ -1,16 +1,15 @@
-//importing modules
+// importing modules
 // Assigning Admins to the variable Admin
-const db = require("../../models");
+const db = require('../../models');
 const Teacher = db.models.teacher;
-const TeacherRelation = db.models.teacher_class_relation;
-const makeResponse = require("../../middleware/response.js");
-const { createToken } = require("../../middleware/token");
-const { createHashPassword, compareHash } = require("../../middleware/bcrypt");
+const makeResponse = require('../../middleware/response.js');
+const { createToken } = require('../../middleware/token');
+const { createHashPassword, compareHash } = require('../../middleware/bcrypt');
 
 const getTeacher = async (req, res) => {
   try {
     const teacher = await Teacher.findAll({
-      attributes: ["nip", "fullName", "gender", "alamat"],
+      attributes: ['nip', 'fullName', 'gender', 'alamat']
     });
     return makeResponse.success(res, teacher);
   } catch (error) {
@@ -24,11 +23,11 @@ const registerTeacher = async (req, res) => {
   if (hashedPassword instanceof Error) throw hashedPassword;
   try {
     const teacher = await Teacher.create({
-      nip: nip,
-      fullName: fullName,
-      alamat: alamat,
-      gender: gender,
-      password: hashedPassword,
+      nip,
+      fullName,
+      alamat,
+      gender,
+      password: hashedPassword
     });
     return makeResponse.success(res, teacher);
   } catch (err) {
@@ -40,12 +39,12 @@ const signInTeacher = async (req, res) => {
   try {
     const teacher = await Teacher.findAll({
       where: {
-        nip: req.body.nip,
-      },
+        nip: req.body.nip
+      }
     });
     const isMatch = await compareHash(req.body.password, teacher[0].password);
     if (!isMatch) {
-      return makeResponse.failed(res, { message: "Password Salah" });
+      return makeResponse.failed(res, { message: 'Password Salah' });
     }
     const teacherName = teacher[0].fullName;
     const nip = teacher[0].nip;
@@ -53,7 +52,7 @@ const signInTeacher = async (req, res) => {
     return makeResponse.success(res, {
       token: accessToken,
       name: teacherName,
-      nip: nip,
+      nip
     });
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -65,11 +64,11 @@ const findTeacherByNip = async (req, res) => {
     // TODO
     const teacher = await Teacher.findOne({
       where: {
-        nip: req.params.nip,
-      },
+        nip: req.params.nip
+      }
     });
     if (teacher === null) {
-      return makeResponse.failed(res, { message: "Teacher Not Found" });
+      return makeResponse.failed(res, { message: 'Teacher Not Found' });
     }
     return makeResponse.success(res, teacher);
   } catch (err) {
@@ -85,12 +84,12 @@ const updateTeacher = async (req, res) => {
         fullName: req.body.fullName,
         alamat: req.body.alamat,
         gender: req.body.gender,
-        password: req.body.password,
+        password: req.body.password
       },
       {
         where: {
-          nip: req.params.nip,
-        },
+          nip: req.params.nip
+        }
       }
     );
     return makeResponse.success(res, teacher);
@@ -104,10 +103,10 @@ const deleteTeacher = async (req, res) => {
     // TODO
     await Teacher.destroy({
       where: {
-        nip: req.params.nip,
-      },
+        nip: req.params.nip
+      }
     });
-    return makeResponse.success(res, { message: "Delete Success" });
+    return makeResponse.success(res, { message: 'Delete Success' });
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -119,5 +118,5 @@ module.exports = {
   signInTeacher,
   findTeacherByNip,
   updateTeacher,
-  deleteTeacher,
+  deleteTeacher
 };

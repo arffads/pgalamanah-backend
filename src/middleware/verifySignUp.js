@@ -1,4 +1,4 @@
-const db = require("../models/index");
+const db = require('../models/index');
 const Teacher = db.models.teacher;
 const Admin = db.models.admin;
 const Student = db.models.student;
@@ -59,5 +59,5 @@ module.exports = {
   checkDuplicateUsernameAdmin,
   checkDuplicateUsernameTeacher,
   checkDuplicateUsernameStudent,
-  checkDuplicateClassroom,
+  checkDuplicateClassroom
 };

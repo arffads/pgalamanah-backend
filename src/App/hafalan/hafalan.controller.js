@@ -1,16 +1,20 @@
-//importing modules
+// importing modules
 // Assigning Admins to the variable Student
-const db = require("../../models");
+const db = require('../../models');
 const Hafalan = db.models.hafalan;
-const DetailHafalan = db.models.detail_hafalan;
 const Student = db.models.student;
-const makeResponse = require("../../middleware/response");
-const fs = require("fs");
+const DetailHafalan = db.models.DetailHafalan;
+const makeResponse = require('../../middleware/response');
+const fs = require('fs');
 
 const getAllHafalan = async (req, res) => {
   try {
     const hafalan = await Hafalan.findAll({
-      attributes: ["id", "title","image_media", "media_reader", "category_id"],
+      attributes: ['id', 'title', 'image_media', 'media_reader', 'category_id'],
+      model: DetailHafalan,
+      through: {
+        attributes: ['id', 'grade', 'record', 'hafalan_id']
+      }
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -22,15 +26,15 @@ const getHafalanByNis = async (req, res) => {
   try {
     const findStudent = await Student.findOne({
       where: {
-        nis: req.params.nis,
-      },
+        nis: req.params.nis
+      }
     });
 
     if (findStudent === null) {
-      return makeResponse.failed(res, { message: "Unregistered Student" });
+      return makeResponse.failed(res, { message: 'Unregistered Student' });
     }
     const hafalan = await Hafalan.findAll({
-      attributes: ["id", "title", "media_reader", "category_id"],
+      attributes: ['id', 'title', 'media_reader', 'category_id']
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -43,7 +47,7 @@ const addHafalan = async (req, res) => {
     if (req.file) {
       const uploadImg = await fs.rename(
         req.file.path,
-        `public/surat_img${req.file.originalname}`,
+        `public/surat_img/${req.file.originalname}`,
         (err) => {
           if (err) throw err;
         }
@@ -53,7 +57,7 @@ const addHafalan = async (req, res) => {
       title: req.body.title,
       image_media: req.file.originalname,
       media_reader: req.body.media_reader,
-      category_id: req.body.category_id,
+      category_id: req.body.category_id
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -66,8 +70,8 @@ const getHafalanByCategoryId = async (req, res) => {
     // TODO
     const hafalan = await Hafalan.findAll({
       where: {
-        category_id: req.params.category_id,
-      },
+        category_id: req.params.category_id
+      }
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -80,8 +84,8 @@ const getHafalanById = async (req, res) => {
     // TODO
     const hafalan = await Hafalan.findAll({
       where: {
-        id: req.params.id,
-      },
+        id: req.params.id
+      }
     });
     return makeResponse.success(res, hafalan);
   } catch (err) {
@@ -91,23 +95,23 @@ const getHafalanById = async (req, res) => {
 
 const updateHafalan = async (req, res) => {
   try {
-    const { title, media_reader, category_id } = req.body;
+    const { title, mediaReader, categoryId } = req.body;
     await Hafalan.update(
       {
-        title: title,
-        media_reader: media_reader,
-        category_id: category_id,
+        title,
+        mediaReader,
+        categoryId
       },
       {
         where: {
-          id: req.params.id,
-        },
+          id: req.params.id
+        }
       }
     );
     return makeResponse.success(res, {
-      title: title,
-      media_reader: media_reader,
-      category_id: category_id,
+      title,
+      mediaReader,
+      categoryId
     });
   } catch (err) {
     return makeResponse.failed(res, err);
@@ -118,10 +122,10 @@ const deleteHafalan = async (req, res) => {
   try {
     await Hafalan.destroy({
       where: {
-        id: req.params.id,
-      },
+        id: req.params.id
+      }
     });
-    return makeResponse.success(res, { message: "Delete Success" });
+    return makeResponse.success(res, { message: 'Delete Success' });
   } catch (err) {
     return makeResponse.failed(res, err);
   }
@@ -134,5 +138,5 @@ module.exports = {
   updateHafalan,
   deleteHafalan,
   getHafalanById,
-  getHafalanByNis,
+  getHafalanByNis
 };

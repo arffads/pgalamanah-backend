@@ -1,27 +1,27 @@
 module.exports = (sequelize, DataTypes) => {
   const Teacher = sequelize.define(
-    "teacher",
+    'teacher',
     {
       nip: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true,
+        primaryKey: true
       },
       fullName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
       },
       alamat: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       gender: {
         type: DataTypes.ENUM,
-        values: ["Laki-Laki", "Perempuan"],
+        values: ['Laki-Laki', 'Perempuan']
       },
       password: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     { freezeTableName: true }
   );
