@@ -9,7 +9,7 @@ const makeResponse = require("../../middleware/response.js");
 const getClass = async (req, res) => {
   try {
     const classroom = await Classroom.findAll({
-      attributes: ["kode_kelas", "nama_kelas"],
+      attributes: ["kode_kelas", "nama_kelas", "status"],
       include: [
         {
           attributes: ["nip", "fullName", "alamat", "gender"],
@@ -67,8 +67,8 @@ const createClass = async (req, res) => {
     }
 
     const classroom = await Classroom.create({
-      kode_kelas: kode_kelas,
-      nama_kelas: nama_kelas,
+      kode_kelas,
+      nama_kelas,
       status: "ON_PROGRESS",
     });
     let classCode = classroom.kode_kelas;

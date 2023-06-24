@@ -13,6 +13,7 @@ const sequelize = new Sequelize(
   {
     host: development.HOST,
     dialect: development.dialect,
+    pool: development.pool
   }
 );
 

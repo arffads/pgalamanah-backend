@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    network_mode: "host"
+    build: 
+      context: .
+      network: host
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $PORT:$NODE_DOCKER_PORT
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=$DATABASE_USERNAME
+      - DB_PASSWORD=$DATABASE_PASSWORD
+      - DB_NAME=$DATABASE_NAME
+      - DB_PORT=$DATABASE_PORT
+    stdin_open: true
+    tty: true
+
+volumes: 
+  db:
